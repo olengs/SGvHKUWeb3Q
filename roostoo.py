@@ -2,6 +2,7 @@ import requests
 import time
 import hmac
 import hashlib
+import json
 
 BASE_URL = "https://mock-api.roostoo.com"
 
@@ -193,4 +194,11 @@ class Roostoo():
         except requests.exceptions.RequestException as e:
             print(f"Error canceling order: {e}")
             print(f"Response text: {e.response.text if e.response else 'N/A'}")
+            return None
+        
+    def get_available_assets(self):
+        exchange = self.get_exchange_info()
+        try:
+            return list(exchange["TradePairs"].keys())
+        except:
             return None
