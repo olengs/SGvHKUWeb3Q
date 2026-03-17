@@ -3,44 +3,51 @@ import os
 import dotenv
 dotenv.load_dotenv()
 from polymarket import PolyMarket
-
+ 
 MODE = os.getenv("MODE")
-API_KEY = os.getenv(f"{MODE}_API_KEY")   # Replace with your actual API key
-SECRET_KEY = os.getenv(f"{MODE}_API_SECRET") # Replace with your actual secret key
-slug = "what-price-will-bitcoin-hit-march-16-22"
-
+API_KEY = os.getenv(f"{MODE}_API_KEY")
+SECRET_KEY = os.getenv(f"{MODE}_API_SECRET")
+ 
+DAILY_SLUGS = [
+    ("March 17", "bitcoin-price-on-march-17"),
+    ("March 18", "bitcoin-price-on-march-18"),
+    ("March 19", "bitcoin-price-on-march-19"),
+    ("March 20", "bitcoin-price-on-march-20"),
+    ("March 21", "bitcoin-price-on-march-21"),
+    ("March 22", "bitcoin-price-on-march-22"),
+    ("March 23", "bitcoin-price-on-march-23"),
+]
+ 
 if __name__ == "__main__":
-    
+ 
     broker = Roostoo(API_KEY, SECRET_KEY)
     market = PolyMarket()
-    x = market.get_market_data("Bitcoin price on March 17?")
-    PolyMarket.print_market_data(x)
-    #print(x)
-    
-    # print(f"API_KEY: {API_KEY}")
-    # print(f"SECRET_KEY: {SECRET_KEY}")
-    # print("\n--- Checking Server Time ---")
-    # print(broker.check_server_time())
-
-    # print("\n--- Getting Exchange Info ---")
-    # info = broker.get_exchange_info()
-    # if info:
-    #     print(f"Available Pairs: {list(info.get('TradePairs', {}).keys())}")
-
-    # print("\n--- Getting Market Ticker (BTC/USD) ---")
-    # ticker = broker.get_ticker("BTC/USD")
-    # if ticker:
-    #     print(ticker.get("Data", {}).get("BTC/USD", {}))
-
-    # print("\n--- Getting Account Balance ---")
-    # print(broker.get_balance())
-
-    # print("\n--- Checking Pending Orders ---")
-    # print(broker.get_pending_count())
-
-    # # Uncomment these to test trading actions:
-    # # print(place_order("BTC", "BUY", 0.01, price=95000))  # LIMIT
-    # print(broker.place_order("BNB/USD", "BUY", 1))      
-    # print(broker.place_order("BNB/USD", "SELL", 1))             # MARKET       
-    # print(broker.query_order(pair="BNB/USD", pending_only=False))
-    # # print(cancel_order(pair="BNB/USD"))
+ 
+    all_results = {}
+ 
+    for label, slug in DAILY_SLUGS:
+        print(f"\n{'='*50}")
+        print(f"  Bitcoin Price — {label}")
+        print(f"  Slug: {slug}")
+        print(f"{'='*50}")
+        try:
+            data = market.get_market_data(slug)
+            if not data:
+                print(f"  [!] No liquid markets found for {label} (slug may not exist yet or all spreads too wide)")
+                all_results[label] = []
+                continue
+            PolyMarket.print_market_data(data)
+            all_results[label] = data
+        except Exception as e:
+            print(f"  [!] Error fetching {label}: {e}")
+            all_results[label] = []
+ 
+    print(f"\n{'='*50}")
+    print("  Summary — brackets with highest probability per day")
+    print(f"{'='*50}")
+    for label, data in all_results.items():
+        if not data:
+            print(f"  {label}: no data")
+            continue
+        top = max(data, key=lambda x: x["p"])
+        print(f"  {label}: {top['Question']} @ {float(top['p'])*100:.1f}%  |  bid={top['Yes']['bid']:.3f}  ask={top['Yes']['ask']:.3f}")
