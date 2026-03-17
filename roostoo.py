@@ -174,7 +174,6 @@ class Roostoo():
             print(f"Response text: {e.response.text if e.response else 'N/A'}")
             return None
 
-
     def cancel_order(self, order_id=None, pair=None):
         """Cancel specific or all pending orders."""
         url = f"{BASE_URL}/v3/cancel_order"
