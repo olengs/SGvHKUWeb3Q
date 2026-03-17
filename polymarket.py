@@ -31,8 +31,6 @@ class PolyMarket():
         slug = "-".join(slug.lower().split())
         data = requests.get(f"{EVENT_SLUG_URL}/{slug}", timeout=20).json()
         market = data["markets"]
-        with open("test.json", 'w') as f:
-            f.write(json.dumps(market))
         ret = []
         for i, predictions in enumerate(market):
             yes_id = json.loads(predictions["clobTokenIds"])[0]
