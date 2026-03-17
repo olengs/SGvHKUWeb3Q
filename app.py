@@ -1,46 +1,37 @@
-from roostoo import Roostoo
+from polymarket import PolyMarket, fetch_polymarket_bands
 import os
+import json
 import dotenv
+from detection import Detection
+
 dotenv.load_dotenv()
-from polymarket import PolyMarket
 
 MODE = os.getenv("MODE")
-API_KEY = os.getenv(f"{MODE}_API_KEY")   # Replace with your actual API key
-SECRET_KEY = os.getenv(f"{MODE}_API_SECRET") # Replace with your actual secret key
-slug = "what-price-will-bitcoin-hit-march-16-22"
+API_KEY = os.getenv(f"{MODE}_API_KEY")
+SECRET_KEY = os.getenv(f"{MODE}_API_SECRET")
+
+def AnalyseMarket():
+    #Use monte carlo to analyse
+    all_results, bands = fetch_polymarket_bands()
+
+    with open("polymarket_bands.json", "w", encoding="utf-8") as f:
+        json.dump(bands, f, indent=2)
+
+    print("\n[✓] polymarket_bands.json written")
+
+    return True
+
 
 if __name__ == "__main__":
-    
-    broker = Roostoo(API_KEY, SECRET_KEY)
-    market = PolyMarket()
-    x = market.get_market_data("Bitcoin price on March 17?")
-    PolyMarket.print_market_data(x)
-    #print(x)
-    
-    # print(f"API_KEY: {API_KEY}")
-    # print(f"SECRET_KEY: {SECRET_KEY}")
-    # print("\n--- Checking Server Time ---")
-    # print(broker.check_server_time())
+    market_detector = Detection("BTC/USD", 10)
 
-    # print("\n--- Getting Exchange Info ---")
-    # info = broker.get_exchange_info()
-    # if info:
-    #     print(f"Available Pairs: {list(info.get('TradePairs', {}).keys())}")
+    while True:
+        if market_detector.update():
+            continue
 
-    # print("\n--- Getting Market Ticker (BTC/USD) ---")
-    # ticker = broker.get_ticker("BTC/USD")
-    # if ticker:
-    #     print(ticker.get("Data", {}).get("BTC/USD", {}))
+        
+        #Warning triggered
+        if AnalyseMarket():
 
-    # print("\n--- Getting Account Balance ---")
-    # print(broker.get_balance())
-
-    # print("\n--- Checking Pending Orders ---")
-    # print(broker.get_pending_count())
-
-    # # Uncomment these to test trading actions:
-    # # print(place_order("BTC", "BUY", 0.01, price=95000))  # LIMIT
-    # print(broker.place_order("BNB/USD", "BUY", 1))      
-    # print(broker.place_order("BNB/USD", "SELL", 1))             # MARKET       
-    # print(broker.query_order(pair="BNB/USD", pending_only=False))
-    # # print(cancel_order(pair="BNB/USD"))
+            #Buy/Sell the stock
+            pass

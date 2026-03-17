@@ -1,0 +1,44 @@
+{
+  "Mar 17": {
+    "mu_r_pct": 0.256808,
+    "sigma_r_pct": 1.850314,
+    "ann_vol_pct": 35.35,
+    "kl": 0.00908871,
+    "grade": "GOOD"
+  },
+  "Mar 18": {
+    "mu_r_pct": 0.031966,
+    "sigma_r_pct": 3.881919,
+    "ann_vol_pct": 74.16,
+    "kl": 0.02894784,
+    "grade": "FAIR"
+  },
+  "Mar 19": {
+    "mu_r_pct": -0.116612,
+    "sigma_r_pct": 4.925741,
+    "ann_vol_pct": 94.11,
+    "kl": 0.01548788,
+    "grade": "GOOD"
+  },
+  "Mar 20": {
+    "mu_r_pct": -0.340313,
+    "sigma_r_pct": 5.865928,
+    "ann_vol_pct": 112.07,
+    "kl": 0.01567717,
+    "grade": "GOOD"
+  },
+  "Mar 22": {
+    "mu_r_pct": -0.495645,
+    "sigma_r_pct": 6.948629,
+    "ann_vol_pct": 132.75,
+    "kl": 0.02151347,
+    "grade": "FAIR"
+  },
+  "Mar 23": {
+    "mu_r_pct": 0.127563,
+    "sigma_r_pct": 7.088118,
+    "ann_vol_pct": 135.42,
+    "kl": 0.00546052,
+    "grade": "GOOD"
+  }
+}
