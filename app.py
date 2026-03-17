@@ -5,11 +5,13 @@ dotenv.load_dotenv()
 
 MODE = os.getenv("MODE")
 API_KEY = os.getenv(f"{MODE}_API_KEY")   # Replace with your actual API key
-SECRET_KEY = os.getenv(f"{MODE}TEST_API_SECRET") # Replace with your actual secret key
+SECRET_KEY = os.getenv(f"{MODE}_API_SECRET") # Replace with your actual secret key
 
 if __name__ == "__main__":
     
     broker = Roostoo(API_KEY, SECRET_KEY)
+    print(f"API_KEY: {API_KEY}")
+    print(f"SECRET_KEY: {SECRET_KEY}")
     print("\n--- Checking Server Time ---")
     print(broker.check_server_time())
 
