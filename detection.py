@@ -12,19 +12,19 @@ SECRET_KEY = os.getenv(f"{MODE}_API_SECRET") # Replace with your actual secret k
 ASSET = "BTC/USD"
 
 class Detection():
-    def __init__(self, ticker, difference_threshold, warning_callback):
+    def __init__(self, ticker, difference_threshold):
         self.ticker = ticker
-        self.callback = warning_callback
         self.broker = Roostoo(API_KEY, SECRET_KEY)
         self.difference_threshold = difference_threshold
         self.prev = self.get_ticker_last_price()
 
     def update(self):
         new_price = self.get_ticker_last_price()
+        ret = True
         if new_price <= self.prev - self.difference_threshold:
-            self.callback()
+            ret = False
         self.prev = new_price
-        return new_price
+        return ret
     
     def get_ticker_last_price(self):
         values = self.broker.get_ticker(self.ticker)
@@ -34,11 +34,13 @@ class Detection():
             return None
         
 
-# SAMPLE
+# # Sample
 # def warning():
 #     print("WARNING!!!")
 
-# d = Detection(ASSET, 1, warning)
+# d = Detection(ASSET, 1)
 # while True:
-#     print(d.update())
-#     time.sleep(1)
+#     if not d.update():
+#         warning()
+#     print(d.prev)
+#     time.sleep(5)

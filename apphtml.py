@@ -252,7 +252,6 @@ def write_html_output(
 
     print(f"[✓] {html_path} written")
 
-
 if __name__ == "__main__":
     write_html_output(
         bands_path="polymarket_bands.json",
