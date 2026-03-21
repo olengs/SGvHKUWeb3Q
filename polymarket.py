@@ -73,7 +73,7 @@ def extract_bracket_label(question: str) -> str:
         return f"{lo // 1000}-{hi // 1000}k"
     return f"{nums[0] // 1000}k"
 
-def fetch_polymarket_bands(market: PolyMarket, daily_slugs: list[tuple[str, str]]) -> tuple[dict, dict]:
+def fetch_polymarket_bands(market: PolyMarket) -> tuple[dict, dict]:
     market = PolyMarket()
     all_results = {}
     bands = {}

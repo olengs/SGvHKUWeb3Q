@@ -3,7 +3,6 @@ dotenv.load_dotenv()
 
 from roostoo import Roostoo
 import os
-import time
 
 MODE = os.getenv("MODE")
 API_KEY = os.getenv(f"{MODE}_API_KEY")   # Replace with your actual API key
@@ -21,10 +20,11 @@ class Detection():
     def update(self):
         new_price = self.get_ticker_last_price()
         ret = True
-        if new_price <= self.prev - self.difference_threshold:
+        diff = new_price - self.prev
+        if abs(diff) > self.difference_threshold:
             ret = False
         self.prev = new_price
-        return ret
+        return ret, diff
     
     def get_ticker_last_price(self):
         values = self.broker.get_ticker(self.ticker)

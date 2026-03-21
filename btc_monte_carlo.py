@@ -60,10 +60,14 @@ LGB_PARAMS = {
 # Live Polymarket CLOB odds (label, lo, hi, probability)
 # lo=None → open lower tail   hi=None → open upper tail
 
-with open("polymarket_bands.json", "r") as f:
-    my_json = json.load(f)
+POLYMARKET = {}
 
-POLYMARKET = bands_by_date_format(my_json)
+def update_polymarket_bands():
+    global POLYMARKET
+    with open("polymarket_bands.json", "r") as f:
+        my_json = json.load(f)
+
+    POLYMARKET = bands_by_date_format(my_json)
 
 # ─────────────────────────────────────────────────────────────
 # NORMAL-DISTRIBUTION BRACKET CALIBRATOR
