@@ -3,6 +3,7 @@ import os
 import json
 import dotenv
 from detection import Detection
+import time
 
 dotenv.load_dotenv()
 
@@ -26,12 +27,14 @@ if __name__ == "__main__":
     market_detector = Detection("BTC/USD", 10)
 
     while True:
-        if market_detector.update():
+        execeed_thresh, diff = market_detector.update()
+        if execeed_thresh:
+            time.sleep(60 * 60)
             continue
 
-        
-        #Warning triggered
-        if AnalyseMarket():
+        #Warning triggered and went down
+        if diff < 0:
+            pass
 
-            #Buy/Sell the stock
+        else: #Warning triggered and went up
             pass
