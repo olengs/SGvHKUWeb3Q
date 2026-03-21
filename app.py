@@ -4,6 +4,8 @@ import json
 import dotenv
 from detection import Detection
 import time
+import btc_monte_carlo
+from roostoo import Roostoo
 
 dotenv.load_dotenv()
 
@@ -25,6 +27,7 @@ def AnalyseMarket():
 
 if __name__ == "__main__":
     market_detector = Detection("BTC/USD", 10)
+    polymarket = PolyMarket()
 
     while True:
         execeed_thresh, diff = market_detector.update()
@@ -32,9 +35,16 @@ if __name__ == "__main__":
             time.sleep(60 * 60)
             continue
 
+        fetch_polymarket_bands(polymarket)
+        btc_monte_carlo.update_polymarket_bands()
+
+        results, model = btc_monte_carlo.run_pipeline()
+
         #Warning triggered and went down
         if diff < 0:
+
             pass
 
         else: #Warning triggered and went up
+
             pass
