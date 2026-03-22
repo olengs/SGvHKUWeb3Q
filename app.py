@@ -84,10 +84,10 @@ if __name__ == "__main__":
     while True:
         execeed_thresh, diff = market_detector.update()
         prev_order = None
-        # if not execeed_thresh:
-        #     logger.log(f"price did not execeed threshold: at last price: {market_detector.get_ticker_last_price()}, waiting for next hour...")
-        #     time.sleep(60 * 60) #check every hour
-        #     continue
+        if not execeed_thresh:
+            logger.log(f"price did not execeed threshold: at last price: {market_detector.get_ticker_last_price()}, waiting for next hour...")
+            time.sleep(60 * 60) #check every hour
+            continue
 
         today_bands = fetch_today_bands()
         if today_bands is None:
