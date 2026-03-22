@@ -76,7 +76,7 @@ def sell_from_roostoo(broker:Roostoo, coin):
 
 if __name__ == "__main__":
     coin = "BTC/USD"
-    market_detector = Detection(coin, 500)
+    market_detector = Detection(coin, 1000)
     polymarket = PolyMarket()
     logger = MyLogger("log.txt")
     roostoo = Roostoo(API_KEY, SECRET_KEY)
@@ -86,7 +86,7 @@ if __name__ == "__main__":
         prev_order = None
         if not execeed_thresh:
             logger.log(f"price did not execeed threshold: at last price: {market_detector.get_ticker_last_price()}, waiting for next hour...")
-            time.sleep(60 * 60) #check every hour
+            time.sleep(2 * 60 * 60) #check every 2 hours
             continue
 
         today_bands = fetch_today_bands()
