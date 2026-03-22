@@ -118,5 +118,3 @@ if __name__ == "__main__":
             quantity, amt = buy_from_roostoo(roostoo, coin, 50000)
             logger.log(f"Bought {coin} of quantity: {quantity} at price: {amt}")
             prev_order = {"entry_price": amt, "qty": quantity}
-
-
