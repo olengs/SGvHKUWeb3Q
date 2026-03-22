@@ -39,8 +39,8 @@ from scipy.optimize import minimize
 # ──────────────────────────────────────────────────────────────────────────────
 # CONFIG
 # ──────────────────────────────────────────────────────────────────────────────
-SKEW_THRESHOLD     = 1.05   # P_bull / P_bear ratio required for entry
-EV_MIN_ENTRY       = 0.015  # 1.5%  — min end-of-day EV to open
+SKEW_THRESHOLD     = 1.25   # P_bull / P_bear ratio required for entry
+EV_MIN_ENTRY       = 0.025  # 2.5%  — min end-of-day EV to open
 EV_MIN_HOLD        = 0.040  # 4.0%  — min EV to keep holding after profit trigger
 MAX_DRAWDOWN_PROB  = 0.10   # 10%   — max P(2h drop > $2,000)
 PROFIT_TRIGGER_PCT = 0.02   # 2%    — unrealised gain % that activates profit check
@@ -242,10 +242,10 @@ def evaluate(today_bands: list, position: dict | None = None, S0: float | None =
         entry_price    = float(position["entry_price"])
         unrealised_pct = (S0 - entry_price) / entry_price
 
-        if mc["ev"] < 0:
+        if mc["ev"] < -0.01:
             signal, action = -1, "CUT"
             reason = (
-                f"EV {mc['ev']*100:+.2f}% is NEGATIVE — full derisking "
+                f"EV {mc['ev']*100:+.2f}% below -1% — full derisking "
                 f"[PnL {unrealised_pct*100:+.2f}%]"
             )
         elif unrealised_pct >= PROFIT_TRIGGER_PCT and mc["ev"] < EV_MIN_HOLD:
