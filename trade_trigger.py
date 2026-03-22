@@ -39,8 +39,8 @@ from scipy.optimize import minimize
 # ──────────────────────────────────────────────────────────────────────────────
 # CONFIG
 # ──────────────────────────────────────────────────────────────────────────────
-SKEW_THRESHOLD     = 1.25   # P_bull / P_bear ratio required for entry
-EV_MIN_ENTRY       = 0.025  # 2.5%  — min end-of-day EV to open
+SKEW_THRESHOLD     = 1.15   # P_bull / P_bear ratio required for entry
+EV_MIN_ENTRY       = 0.01  # 1%  — min end-of-day EV to open
 EV_MIN_HOLD        = 0.040  # 4.0%  — min EV to keep holding after profit trigger
 MAX_DRAWDOWN_PROB  = 0.10   # 10%   — max P(2h drop > $2,000)
 PROFIT_TRIGGER_PCT = 0.02   # 2%    — unrealised gain % that activates profit check
