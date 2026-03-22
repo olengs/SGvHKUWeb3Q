@@ -19,10 +19,10 @@ class Detection():
 
     def update(self):
         new_price = self.get_ticker_last_price()
-        ret = True
+        ret = False
         diff = new_price - self.prev
         if abs(diff) > self.difference_threshold:
-            ret = False
+            ret = True
         self.prev = new_price
         return ret, diff
     

@@ -114,7 +114,6 @@ class Roostoo():
             print(f"Response text: {e.response.text if e.response else 'N/A'}")
             return None
 
-
     def place_order(self, pair_or_coin, side, quantity, price=None, order_type=None):
         """
         Place a LIMIT or MARKET order.
@@ -149,7 +148,6 @@ class Roostoo():
             print(f"Error placing order: {e}")
             print(f"Response text: {e.response.text if e.response else 'N/A'}")
             return None
-
 
     def query_order(self, order_id=None, pair=None, pending_only=None):
         """Query order history or pending orders."""
@@ -199,5 +197,12 @@ class Roostoo():
         exchange = self.get_exchange_info()
         try:
             return list(exchange["TradePairs"].keys())
+        except:
+            return None
+
+    def get_ticker_last_price(self, coin):
+        values = self.get_ticker(coin)
+        try:
+            return values["Data"][coin]["LastPrice"]
         except:
             return None
