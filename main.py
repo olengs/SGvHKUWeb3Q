@@ -1,11 +1,12 @@
 from polymarket import PolyMarket, fetch_polymarket_bands
 from trade_trigger import evaluate
-from roostoo import place_order, get_ticker, get_balance
+# from roostoo import place_order, get_ticker, get_balance
 import os
 import json
 import dotenv
 from detection import Detection
 from datetime import datetime
+from roostoo import Roostoo
 
 dotenv.load_dotenv()
 
@@ -15,6 +16,7 @@ SECRET_KEY = os.getenv(f"{MODE}_API_SECRET")
 
 PAIR           = "BTC/USD"
 ORDER_FRACTION = 0.10   # 10% of total portfolio value
+ORDER_AMOUNT = ORDER_FRACTION * 1,000,000
 
 # Persists across loop iterations
 open_position: dict | None = None
@@ -80,7 +82,7 @@ def get_order_size_btc(S0: float) -> float:
 def fetch_today_bands() -> list | None:
     """Fetch Polymarket, write JSON, return today's brackets as (label,lo,hi,prob) tuples."""
     market = PolyMarket()
-    _, bands = fetch_polymarket_bands(market, [])
+    _, bands = fetch_polymarket_bands(market)
 
     with open("polymarket_bands.json", "w", encoding="utf-8") as f:
         json.dump(bands, f, indent=2)
@@ -160,10 +162,11 @@ def execute_signal(signal: int, detail: dict, S0: float) -> None:
 
 if __name__ == "__main__":
     market_detector = Detection("BTC/USD", 10)
+    roostoo = Roostoo(API_KEY, SECRET_KEY)
 
     while True:
-        if market_detector.update():
-            continue
+        # if market_detector.update():
+        #     continue
 
         # Detection triggered — run full analysis
         today_bands = fetch_today_bands()
@@ -171,11 +174,14 @@ if __name__ == "__main__":
             print("[MAIN] No actionable Polymarket data — skipping cycle")
             continue
 
-        S0 = get_spot_price()
+        S0 = market_detector.get_ticker_last_price()
         print(f"[MAIN] Spot: ${S0:,.2f}")
 
         # ── Core signal ──────────────────────────────────────────────────────
         signal, detail = evaluate(today_bands, position=open_position, S0=S0)
 
+        print(signal)
+        break
+
         # ── Execute ──────────────────────────────────────────────────────────
-        execute_signal(signal, detail, S0)
+        # execute_signal(signal, detail, S0)
